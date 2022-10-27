@@ -3,12 +3,13 @@ A currency based on data storage and distributed data storage supported by payme
 
 API:
 * types: 
-  * id: ```u128``` or something that can represent a digest of a dataset
+  * digest: ```u128``` or something that can represent a digest of a dataset
+  * id: Since buffers are content addressed, id is the same as a digest, but used to identify a buffer.
   * buffer: ```byte[]``` It is assumed to transmit a size first to allow receivers to exit earily if offer is too small.
   * provider: Something like a URL to represent other participants
   * offer: reference to coins held in escrow.
 * calls
-  * ```digest(offer: coin, identity: id, start: usize, end: usize): u128```: proof that the provider is storing the dataset.  A provider refusing to return a digest only means that the offer for the digest was too small, not that the data is gone.  This allows for negotiation of the price.  It may need another response of "I don't have the dataset". Not having the data doesn't mean that the provider will not to be able to find the data and start storing it if the offier is high enough.
+  * ```digest(offer: coin, identity: id, salt: digest): digest```: proof that the provider is storing the dataset.  A provider refusing to return a digest only means that the offer for the digest was too small, not that the data is gone.  This allows for negotiation of the price.  It may need another response of "I don't have the dataset". Not having the data doesn't mean that the provider will not to be able to find the data and start storing it if the offier is high enough.
   * ```get(offer: coin, identity: id): buffer```: return the dataset to the client
   * ```put(offer:coin, buffer): boolean```: push data to this provider.  If the offer is too small, the provider can exit early.
   * ```introductions(): endpoints[]```: discover the network.
